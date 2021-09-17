@@ -22,7 +22,6 @@
       public function execute($query)
       {
           $result = $this->connection->query($query);
-
           if ($result == false) {
               echo 'Error: cannot execute the command';
               return false;
