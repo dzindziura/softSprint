@@ -13,7 +13,7 @@
                 <input type='text' name='lastName'  class='form-control mt-2 lastName'>
 
                 <div class='form-check form-switch mt-2'>
-                  <input class='form-check-input' name='checked' type='checkbox'  id='checked' value='1'>
+                  <input class='form-check-input checked' name='checked' type='checkbox'>
                   <label class='form-check-label' for='flexSwitchCheckChecked'>Status</label>
                 </div>
                 <select class='form-select mt-2 role' name='role'>
@@ -35,58 +35,147 @@
       </div>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+
   $('#errorBlock').hide();
     $(document).on('click','#edit',function(){
+
     let edit_id = $(this).data('id');
-      if(edit_id){
-        let eds = $(this).parents('tr').find('.fname');
-        $('.firstName').val($(eds).text())
-        let eds1 = $(this).parents('tr').find('.lname');
-        $('.lastName').val($(eds1).text())
-        let eds2 = $(this).parents('tr').find('.role_user');
+    if(edit_id){
+      if($(`.${edit_id}`).find('.cls').val() == 'on'){
+        $('.checked').prop('checked', true);
       }else{
-        $('.firstName').val('');
-        $('.lastName').val('');
-        $('.role').val(0);
+        $('.checked').prop('checked', false);
       }
+      $('.titl').text('Edit user');
+      $('.firstName').val($(`.${edit_id}`).find('.fname').text());
+      $('.lastName').val($(`.${edit_id}`).find('.lname').text());
+      if($(`.${edit_id}`).find('.role_user').text() == 'admin'){
+        $('.role').val(1);
+      }else if($(`.${edit_id}`).find('.role_user').text() == 'user'){
+        $('.role').val(2);
+      }
+    }else{
+      $('.titl').text('Add user');
+      $('.firstName').val('');
+      $('.lastName').val('');
+      $('.role').val(0);
+    }
   $('#add_user').click(function(){
-    var firstName = $('.firstName').val();
-    var lastName = $('.lastName').val();
-    var checked = $('#checked').val();
-    var role = $('#role').val();
-    var checked = [];
-    $('#checked').each(function(){
-        if(this.checked) {
-            checked.push($(this).val());
-        }else if($(this).hasClass('text')){
-            checked.push($(this).val());
-        }
-    });
-    checked = checked.toString();
-    $.ajax({
-      url: 'ajax/addEdit.php',
-      type: 'POST',
-      cache: false,
-      data: {'firstName': firstName, 'lastName': lastName, 'checked': checked, 'role': role, 'id': edit_id},
-      dataType: 'html',
-      success: function(data){
-        if(data == 'Готово'){
-          $('#errorBlock').hide();
-          $('#add_user').text("Готово");
-          $('#close').click();
-          showUser();
+    console.log(edit_id)
+    let firstName = $('.firstName').val();
+    let lastName = $('.lastName').val();
+    let checked = $('.checked').val();
+    let role = $('.role').val();
+    if($(".checked:checked").val() == 'on'){
+      checked = 'on';
+      chk = "<input class='cls' type='hidden' value='on'><i class='fas fa-check-circle text-success'></i></input>";
+    }else{
+      checked = 'off';
+      chk = "<input class='cls' type='hidden' value='off'><i class='fas fa-check-circle text-secondary'></i></input>";
+    }
+    if(role == '2'){
+      role = 'user';
+    }else if(role == '1'){
+      role = 'admin';
+    }
+    if(firstName!='' && lastName!='' && role !='0'){
+      if(edit_id !=0){
+        $.ajax({
+            url: 'ajax/addEdit.php',
+            type: 'POST',
+            cache: false,
+            data: {'firstName': firstName, 'lastName': lastName, 'checked': checked, 'role': role, 'id': edit_id},
+            dataType: 'html',
+            success: function(data){
+              $('#close').click();
+              $('#errorBlock').hide();
+              var data = $.parseJSON(data);
+              let id25 = data.id;
+              if(typeof(edit_id) == 'undefined' && firstName != '' && lastName != '' && role != '0'){
+                $('table').append(`<tbody>
+                <tr class='${id25}' data-idrow = '${id25}'>
+                 <td style='width:30px'><input class='form-check-input check'  type='checkbox' value='${id25}'></td>
+                 <td class='fname'>${firstName}</td>
+                 <td class='lname'>${lastName}</td>
+                 <td class='checked_user'>${chk}</td>
+                 <td class='role_user'>${role}</td>
+                 <td>
+                 <ul class='list-unstyled mb-0 d-flex justify-content-center'>
+                 <li class='ms-2'>
+
+                   <button data-id='${id25}' type='button' data-bs-target='#exampleModal' data-bs-toggle='modal' id='edit' class='btn' class='text-danger' data-toggle='tooltip' title='' data-original-title='Edit'>
+                     <i class='fas fa-pencil-alt'></i>
+                   </button>
+                 </li>
+                 <li class='ms-2'>
+                 <button data-trash='${id25}' id='delete' type='button' class='btn delete text-danger'data-toggle='tooltip' title='' data-original-title='Delete' >
+                 <i class='far fa-trash-alt'></i>
+                 </button>
+                 </li>
+                 </ul>
+               </td>
+             </tr>
+                </tbody>`)
+              }else{
+            let ggg =  $('.firstName').val();
+            $(`.${id25}`).find('.fname').text(ggg);
+            let ggg1 =  $('.lastName').val();
+            $(`.${id25}`).find('.lname').text(ggg1);
+            let ggg2 =  $('.role').val();
+            if(ggg2 == 1){
+              $(`.${id25}`).find('.role_user').text('admin');
+            }else if(ggg2 == 2){
+              $(`.${id25}`).find('.role_user').text('user');
+            }
+
+            if(checked == 'off'){
+              $(`.${id25}`).find('.checked_user').html("<input class='cls' type='hidden' value='off'><i class='fas fa-check-circle text-secondary'></i></input>");
+            }else if(checked == 'on'){
+                $(`.${id25}`).find('.checked_user').html("<input class='cls' type='hidden' value='on'><i class='fas fa-check-circle text-success'></i></input>");
+            }
+          }
           edit_id = 0;
-          console.log(edit_id)
-        }else{
-          $('#errorBlock').show();
-          $('#errorBlock').text(data);
-        }
-      },
+            }
 
-    });
+          });
+      }
+
+    }else{
+      $('#errorBlock').show();
+      if(firstName == ''){
+        $('#errorBlock').text('Enter a name');
+      }else if(lastName == ''){
+        $('#errorBlock').text('Enter last name');
+      }else if(role == 0){
+        $('#errorBlock').text('Choose role');
+      }
+    }
+
 
   });
+});
+  $(document).on('click','#delete',function(){
+    let id_trash = $(this).data('trash').toString();
+    console.log(id_trash)
+    $('#PromiseConfirm').modal('toggle');
+    $('.d23').click(function(){
+      if(id_trash!=0){
+        let abr = $.ajax({
+              url: 'ajax/delete.php',
+              type: 'POST',
+              cache: false,
+              data: {'id': id_trash},
+              dataType: 'html',
+              beforeSend: function(){
+                $(`.${id_trash}`).remove();
+                $('#close1').click();
+              },
+              success: function(data){
+                id_trash = 0;
+              }
+            });    
+      }
 
-  });
-
+    })
+  })
 </script>
