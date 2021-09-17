@@ -226,3 +226,4 @@ $(document).on('click','.check',function(){
 <script src='js/script.js' charset='utf-8'></script>
 </body>
 </html>
+/* sdfsdfs */
