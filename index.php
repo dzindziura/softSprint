@@ -164,6 +164,7 @@ $(document).on('click','.ok',function(){
     $('.d24').remove();
     $('.titl2').text('')
     $('.bdn').text('Select an action or user')
+
   }
   if($('.select:first').val() == '1' || $('.select:first').val() == '2' || $('.select:last').val() == '1' || $('.select:last').val() == '2'){
     let valueSelect = 0;
@@ -190,29 +191,32 @@ $(document).on('click','.ok',function(){
       }
     })
   }else if($('.select:first').val() == '3' || $('.select:last').val() == '3'){
-    $('#PromiseConfirm').modal('toggle');
-    $('.d23').click(function(){
-      if(ggg3 != 0){
-        $.ajax({
-          url: 'ajax/delete.php',
-          type: 'POST',
-          cache: false,
-          data: {'id': ggg3},
-          dataType: 'html',
-          beforeSend: function(){
-            let mas = ggg3.split(',');
-            for(let i=0;i<mas.length;i++){
-              $(`.${mas[i]}`).remove();
-              $('#close1').click();
+    if(ggg3 != ''){
+      $('#PromiseConfirm').modal('toggle');
+      $('.d23').click(function(){
+        if(ggg3 != 0){
+          $.ajax({
+            url: 'ajax/delete.php',
+            type: 'POST',
+            cache: false,
+            data: {'id': ggg3},
+            dataType: 'html',
+            beforeSend: function(){
+              let mas = ggg3.split(',');
+              for(let i=0;i<mas.length;i++){
+                $(`.${mas[i]}`).remove();
+                $('#close1').click();
+              }
+            },
+            success: function(data){
+              ggg3 = 0;
             }
-          },
-          success: function(data){
-            ggg3 = 0;
-          }
-        })
-      }
+          })
+        }
 
-    })
+      })  
+    }
+
 
   }
 });
