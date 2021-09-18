@@ -214,7 +214,7 @@ $(document).on('click','.ok',function(){
           })
         }
 
-      })  
+      })
     }
 
 
