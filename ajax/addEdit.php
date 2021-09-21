@@ -15,10 +15,11 @@
     $crud = new Crud();
 if($id == null){
   $result = $crud->execute("INSERT INTO connect(firstName, lastName, checked, role) VALUES('$firstName','$lastName','$checked','$role')");
-  $id3 = $crud->execute("SELECT LAST_INSERT_ID()");
+
 }else if($id>0){
   $result = $crud->execute("UPDATE connect SET firstName='$firstName', lastName='$lastName', checked='$checked', role='$role' WHERE id = $id");
 }
+  $id3 = $crud->lastID();
 if($id3 == null){
   $id3 = $id;
 }

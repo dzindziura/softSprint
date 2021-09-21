@@ -29,6 +29,10 @@
               return true;
           }
       }
+      public function lastID(){
+        $result = mysqli_insert_id($this->connection);
+        return $result;
+      }
       public function delete($id)
       {
           $query = "DELETE FROM connect WHERE id = $id";
