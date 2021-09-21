@@ -11,29 +11,20 @@
     $error = 'Wrong last name';
   else if($role == '0')
     $error = 'No role selected';
-
-    $user = 'root';
-    $password = 'root';
-    $db = 'testing';
-    $host = 'localhost';
-
-    $dsn = 'mysql:host='.$host.';dbname='.$db;
-    $pdo = new PDO($dsn, $user, $password);
+    include_once("../class/crud.php");
+    $crud = new Crud();
 if($id == null){
-  $query = "INSERT INTO connect(firstName, lastName, checked, role) VALUES('$firstName','$lastName','$checked','$role')";
-  $query_success = $pdo->query($query);
-  $id3 = $pdo->lastInsertId();
+  $result = $crud->execute("INSERT INTO connect(firstName, lastName, checked, role) VALUES('$firstName','$lastName','$checked','$role')");
+  $id3 = $crud->execute("SELECT LAST_INSERT_ID()");
 }else if($id>0){
-  $query = "UPDATE connect SET firstName='$firstName', lastName='$lastName', checked='$checked', role='$role' WHERE id = $id";
-  $query_success = $pdo->prepare($query);
-  $query_success->execute();
+  $result = $crud->execute("UPDATE connect SET firstName='$firstName', lastName='$lastName', checked='$checked', role='$role' WHERE id = $id");
 }
 if($id3 == null){
   $id3 = $id;
 }
 
      $data = array(
-       'status'=>'true',
+       'status'=> $result,
        'id'=>$id3,
        'error' => array(
          'code' => http_response_code(),
