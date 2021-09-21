@@ -130,7 +130,6 @@ foreach ($result as $key => $row) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <?php require 'blocks/addEdit.php' ?>
 <?php require 'blocks/modalDelete.php'; ?>
-<?php require 'blocks/modalMess.php'; ?>
 <script>
 console.log($('[data-idrow="612"]'));
 $(document).on('click','#check_all',function(){
