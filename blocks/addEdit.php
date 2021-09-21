@@ -1,4 +1,4 @@
-<div class='modal fade' id='exampleModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+<div class='modal fade' id='addEditModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
         <div class='modal-dialog' role='document'>
           <div class='modal-content'>
             <div class='modal-header'>
@@ -33,25 +33,24 @@
           </div>
         </div>
       </div>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 
   $('#errorBlock').hide();
-    $(document).on('click','#edit',function(){
+    $(document).on('click','.addEditUser',function(){
 
     let edit_id = $(this).data('id');
     if(edit_id){
-      if($(`.${edit_id}`).find('.cls').val() == 'on'){
+      if($(`[data-idrow='${edit_id}']`).find('.cls').val() == 'on'){
         $('.checked').prop('checked', true);
       }else{
         $('.checked').prop('checked', false);
       }
       $('.titl').text('Edit user');
-      $('.firstName').val($(`.${edit_id}`).find('.fname').text());
-      $('.lastName').val($(`.${edit_id}`).find('.lname').text());
-      if($(`.${edit_id}`).find('.role_user').text() == 'admin'){
+      $('.firstName').val($(`[data-idrow='${edit_id}']`).find('.fname').text());
+      $('.lastName').val($(`[data-idrow='${edit_id}']`).find('.lname').text());
+      if($(`[data-idrow='${edit_id}']`).find('.role_user').text() == 'admin'){
         $('.role').val(1);
-      }else if($(`.${edit_id}`).find('.role_user').text() == 'user'){
+      }else if($(`[data-idrow='${edit_id}']`).find('.role_user').text() == 'user'){
         $('.role').val(2);
       }
     }else{
@@ -93,7 +92,7 @@
               let id25 = data.id;
               if(typeof(edit_id) == 'undefined' && firstName != '' && lastName != '' && role != '0'){
                 $('table').append(`<tbody>
-                <tr class='${id25}' data-idrow = '${id25}'>
+                <tr data-idrow = '${id25}'>
                  <td style='width:30px'><input class='form-check-input check'  type='checkbox' value='${id25}'></td>
                  <td class='fname'>${firstName}</td>
                  <td class='lname'>${lastName}</td>
@@ -103,7 +102,7 @@
                  <ul class='list-unstyled mb-0 d-flex justify-content-center'>
                  <li class='ms-2'>
 
-                   <button data-id='${id25}' type='button' data-bs-target='#exampleModal' data-bs-toggle='modal' id='edit' class='btn' class='text-danger' data-toggle='tooltip' title='' data-original-title='Edit'>
+                   <button data-id='${id25}' type='button' data-bs-target='#addEditModal' data-bs-toggle='modal' class='btn addEditUser' data-toggle='tooltip' title='' data-original-title='Edit'>
                      <i class='fas fa-pencil-alt'></i>
                    </button>
                  </li>
@@ -117,21 +116,21 @@
              </tr>
                 </tbody>`)
               }else{
-            let ggg =  $('.firstName').val();
-            $(`.${id25}`).find('.fname').text(ggg);
-            let ggg1 =  $('.lastName').val();
-            $(`.${id25}`).find('.lname').text(ggg1);
-            let ggg2 =  $('.role').val();
-            if(ggg2 == 1){
-              $(`.${id25}`).find('.role_user').text('admin');
-            }else if(ggg2 == 2){
-              $(`.${id25}`).find('.role_user').text('user');
+            let fnameVal =  $('.firstName').val();
+            $(`[data-idrow='${id25}']`).find('.fname').text(fnameVal);
+            let lastNameVal =  $('.lastName').val();
+            $(`[data-idrow='${id25}']`).find('.lname').text(lastNameVal);
+            let roleVal =  $('.role').val();
+            if(roleVal == 1){
+              $(`[data-idrow='${id25}']`).find('.role_user').text('admin');
+            }else if(roleVal == 2){
+              $(`[data-idrow='${id25}']`).find('.role_user').text('user');
             }
 
             if(checked == 'off'){
-              $(`.${id25}`).find('.checked_user').html("<input class='cls' type='hidden' value='off'><i class='fas fa-check-circle text-secondary'></i></input>");
+              $(`[data-idrow='${id25}']`).find('.checked_user').html("<input class='cls' type='hidden' value='off'><i class='fas fa-check-circle text-secondary'></i></input>");
             }else if(checked == 'on'){
-                $(`.${id25}`).find('.checked_user').html("<input class='cls' type='hidden' value='on'><i class='fas fa-check-circle text-success'></i></input>");
+                $(`[data-idrow='${id25}']`).find('.checked_user').html("<input class='cls' type='hidden' value='on'><i class='fas fa-check-circle text-success'></i></input>");
             }
           }
           edit_id = 0;
@@ -158,6 +157,8 @@
     let id_trash = $(this).data('trash').toString();
     console.log(id_trash)
     $('#PromiseConfirm').modal('toggle');
+    $('.titl-modal').text('Delete');
+    $('.body-modal').text('Are you sure want to delete this user?');
     $('.d23').click(function(){
       if(id_trash!=0){
         let abr = $.ajax({
@@ -167,13 +168,13 @@
               data: {'id': id_trash},
               dataType: 'html',
               beforeSend: function(){
-                $(`.${id_trash}`).remove();
+                $(`[data-idrow='${id_trash}']`).remove();
                 $('#close1').click();
               },
               success: function(data){
                 id_trash = 0;
               }
-            });    
+            });
       }
 
     })

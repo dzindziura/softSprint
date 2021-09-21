@@ -2,11 +2,10 @@
      <div class="modal-dialog" role="document">
          <div class="modal-content">
              <div class="modal-header">
-                 <h5 class="modal-title"><span>Delete</span></h5>
+                 <h5 class="modal-title titl-modal"></h5>
                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
              </div>
-             <div class="modal-body">
-                 <p>Are you sure want to delete this user?</p>
+             <div class="modal-body body-modal">
              </div>
              <div class="modal-footer">
                  <button type="button" class="btn btn-success d23" id='d23'>OK</button>
